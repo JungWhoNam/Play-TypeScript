@@ -62,3 +62,48 @@ function getTotal(...numbers: number[]): number {
     return total;
 }
 console.log("get total", getTotal(10,20,30));
+
+// class, readonly access modifier
+class Person {
+    public readonly ssn: string;
+    private firstName: string;
+    private lastName: string;
+
+    constructor(ssn: string, firstName: string, lastName: string) {
+        this.ssn = ssn;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public getFullName(): string {
+        return `${this.firstName} ${this.lastName}`;
+    }
+
+    public describe(): string {
+        return `This is ${this.getFullName()}.`;
+    }
+}
+
+class Employee extends Person {
+    // can declare properties in a constructor
+    constructor(
+        ssn: string,
+        firstName: string,
+        lastName: string, 
+        private jobTitle: string) {
+
+        super(ssn, firstName, lastName);
+    }
+
+    // method overriding
+    public describe(): string {
+        return super.describe() + ` And I am a ${this.jobTitle}`;
+    }
+}
+
+
+let person: Person = new Person('171280926', 'John', 'Doe');
+console.log(person.describe());
+
+let employee: Employee = new Employee('171280926', 'John', 'Doe', 'student');
+console.log(employee.describe());
