@@ -66,17 +66,35 @@ console.log("get total", getTotal(10,20,30));
 // class, readonly access modifier
 class Person {
     public readonly ssn: string;
-    private firstName: string;
-    private lastName: string;
+    private _firstName: string;
+    private _lastName: string;
 
     constructor(ssn: string, firstName: string, lastName: string) {
         this.ssn = ssn;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this._firstName = firstName;
+        this._lastName = lastName;
+    }
+
+    public get firstName() {
+        return this._firstName;
+    }
+
+    public set firstName(firstName: string) {
+        if (!firstName) throw new Error("Invalid first name.");
+        this._firstName = firstName;
+    }
+
+    public get lastName() {
+        return this._firstName;
+    }
+
+    public set lastName(lastName: string) {
+        if (!lastName) throw new Error("Invalid last name.");
+        this._lastName = lastName;
     }
 
     public getFullName(): string {
-        return `${this.firstName} ${this.lastName}`;
+        return `${this._firstName} ${this._lastName}`;
     }
 
     public describe(): string {
@@ -85,6 +103,8 @@ class Person {
 }
 
 class Employee extends Person {
+    private static count: number = 0;
+
     // can declare properties in a constructor
     constructor(
         ssn: string,
@@ -93,17 +113,30 @@ class Employee extends Person {
         private jobTitle: string) {
 
         super(ssn, firstName, lastName);
+
+        Employee.count += 1;
     }
 
     // method overriding
     public describe(): string {
         return super.describe() + ` And I am a ${this.jobTitle}`;
     }
+
+    public static getCount():number {
+        return Employee.count;
+    }
 }
 
 
 let person: Person = new Person('171280926', 'John', 'Doe');
+// person.lastName = null;
+person.lastName = "Duffy";
 console.log(person.describe());
 
-let employee: Employee = new Employee('171280926', 'John', 'Doe', 'student');
-console.log(employee.describe());
+let e0: Employee = new Employee('171280926', 'John', 'Doe', 'student');
+console.log(e0.describe());
+console.log(`the total number of employee... ${Employee.getCount()}`);
+
+let e1: Employee = new Employee('000000000', 'Julie', 'Dam', 'professor');
+console.log(e1.describe());
+console.log(`the total number of employee... ${Employee.getCount()}`);
